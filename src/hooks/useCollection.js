@@ -15,28 +15,33 @@ export const useCollection = (dbCollection, _where, _orderBy, _limit) => {
 
   useEffect(() => {
     let ref = collection(db, dbCollection);
+    let queryParams = [];
 
-    // if (whereParams) {
-    //   ref = [...ref, where(whereParams)];
-    // }
+    if (whereParams) {
+      const w = where(...whereParams);
+      queryParams.push(w);
+    }
 
-    // if (orderByParams) {
-    //   ref = [...ref, orderBy(orderByParams)];
-    // }
+    if (orderByParams) {
+      const o = orderBy(...orderByParams);
+      queryParams.push(o);
+    }
 
-    // if (limitParams) {
-    //   ref = [...ref, limit(limitParams)];
-    // }
-
+    if (limitParams) {
+      const l = limit(limitParams);
+      queryParams.push(l);
+    }
     try {
-      const getDocuments = getDocs(ref);
-      let results = [];
-
-      getDocuments.forEach((doc) => {
-        results.push({ ...doc.data(), id: doc.id });
+      getDocs(
+        query(ref, where(...whereParams), orderBy(...orderByParams), limit(limitParams))
+      ).then((snapshot) => {
+        let results = [];
+        snapshot.forEach((doc) => {
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        setDocuments(results);
+        setError(null);
       });
-      setDocuments(results);
-      setError(null);
     } catch (e) {
       console.log(e);
       setError('Could not fetch the data');
