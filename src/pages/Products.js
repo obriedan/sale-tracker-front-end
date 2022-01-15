@@ -1,21 +1,31 @@
 import react from 'react';
 import { useCollection } from '../hooks/useCollection';
+import { useDocument } from '../hooks/useDocument';
 import './Products.css';
 
+const returnInStockInventory = (string) => {
+  const stockArray = JSON.parse(string);
+  const inStock = stockArray.filter((variant) => Number(variant.stock));
+  return inStock;
+};
+
 export default function Products() {
-  const { documents, error } = useCollection(
+  const { documents: products, error: productsError } = useCollection(
     'products',
-    ['category', '==', 'womens'],
+    ['category', '==', 'mens'],
     ['dateCreated', 'asc'],
     10
   );
 
-  console.log(Array.isArray(documents));
+  const { document: activeProductMap, error: activeProductMapError } = useDocument(
+    'database-info',
+    'active-product-map'
+  );
 
   return (
     <div className='cards-container'>
-      {documents &&
-        documents.map((doc) => (
+      {products &&
+        products.map((doc) => (
           <react.Fragment key={doc.id}>
             <div className='card'>
               <div className='img-container'>
@@ -26,10 +36,19 @@ export default function Products() {
                 <p>Was: €{doc.previousPrice}</p>
                 <p>Now: €{doc.currentPrice}</p>
               </div>
+              <div className='stock-values'>
+                {activeProductMap &&
+                  returnInStockInventory(activeProductMap[doc.id].sizes).map((variant) => (
+                    <react.Fragment>
+                      <p>Size: {variant.size}</p>
+                      <p>Quantity: {variant.stock}</p>
+                    </react.Fragment>
+                  ))}
+              </div>
             </div>
           </react.Fragment>
         ))}
-      {error && <div>{error}</div>}
+      {productsError && <div>{productsError}</div>}
     </div>
   );
 }
