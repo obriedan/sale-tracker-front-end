@@ -1,6 +1,7 @@
 import ProductGrid from '../components/ProductGrid';
 import { useCollection } from '../hooks/useCollection';
 import { useDocument } from '../hooks/useDocument';
+
 import './Home.css';
 
 export default function Products() {
@@ -8,7 +9,7 @@ export default function Products() {
     'products',
     ['category', '==', 'kids'],
     ['dateCreated', 'asc'],
-    10
+    12
   );
 
   const { document: activeProductMap, error: activeProductMapError } = useDocument(
