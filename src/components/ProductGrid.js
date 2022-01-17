@@ -32,7 +32,7 @@ export default function ProductGrid({
                 <div className='stock-container'>
                   {activeProductMap &&
                     returnInStockInventory(activeProductMap[doc.id].sizes).map((variant) => (
-                      <div className='stock-value'>
+                      <div key={Math.random()} className='stock-value'>
                         <p>{variant.size}</p>
                         <p>{variant.stock}</p>
                       </div>
