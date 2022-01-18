@@ -8,17 +8,26 @@ import { queryBuilder } from '../services/Helpers';
 
 import './Home.css';
 import { keyboard } from '@testing-library/user-event/dist/keyboard';
+import Navbar from '../components/Navbar';
+
+const categories = ['Womens', 'Mens', 'Kids', 'Home', 'Lingerie'];
 
 export default function Home() {
+  const [category, setCategory] = useState('womens');
   const [products, setProducts] = useState(null);
   const [productsError, setProductsError] = useState(null);
   const [lastKey, setLastKey] = useState(null);
+
+  const { document: activeProductMap, error: activeProductMapError } = useDocument(
+    'database-info',
+    'active-product-map'
+  );
 
   const fetchMoreProducts = () => {
     if (keyboard.length > 0) {
       const nextQuery = queryBuilder(
         'products',
-        ['category', '==', 'kids'],
+        ['category', '==', category],
         ['dateCreated', 'asc'],
         12,
         lastKey
@@ -33,7 +42,7 @@ export default function Home() {
   useEffect(() => {
     const firstQuery = queryBuilder(
       'products',
-      ['category', '==', 'kids'],
+      ['category', '==', category],
       ['dateCreated', 'asc'],
       12
     );
@@ -43,7 +52,7 @@ export default function Home() {
         setLastKey(response.lastKey);
       })
       .catch((err) => setProductsError(err));
-  }, []);
+  }, [category]);
 
   // const { documents: products, error: productsError } = useCollection(
   //   'products',
@@ -52,15 +61,21 @@ export default function Home() {
   //   1
   // );
 
-  const { document: activeProductMap, error: activeProductMapError } = useDocument(
-    'database-info',
-    'active-product-map'
-  );
-
-  const handleLoadMore = () => {};
-
   return (
     <>
+      <Navbar />
+      <div className='category-buttons'>
+        {categories.map((category) => (
+          <button
+            key={Math.random()}
+            onClick={() => {
+              setCategory(category.toLowerCase());
+            }}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
       <ProductGrid {...{ products, productsError, activeProductMap, activeProductMapError }} />
       <button onClick={fetchMoreProducts}>Load More</button>
     </>
