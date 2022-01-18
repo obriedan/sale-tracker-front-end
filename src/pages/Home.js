@@ -8,7 +8,6 @@ import { queryBuilder } from '../services/Helpers';
 
 import './Home.css';
 import { keyboard } from '@testing-library/user-event/dist/keyboard';
-import Navbar from '../components/Navbar';
 
 const categories = ['Womens', 'Mens', 'Kids', 'Home', 'Lingerie'];
 
@@ -63,7 +62,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
       <div className='category-buttons'>
         {categories.map((category) => (
           <button
