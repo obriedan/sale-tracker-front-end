@@ -1,7 +1,7 @@
 // firebase imports
 import { getDocs } from 'firebase/firestore';
 
-export default {
+const Products = {
   getProductsFromFirebase: async function (query) {
     try {
       const data = await getDocs(query);
@@ -21,3 +21,5 @@ export default {
     }
   },
 };
+
+export default Products;
