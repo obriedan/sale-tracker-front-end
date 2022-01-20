@@ -1,10 +1,10 @@
-import ProductGrid from '../components/ProductGrid';
+import ProductGrid from '../../components/ProductGrid';
 //import { useCollection } from '../hooks/useCollection';
-import { useDocument } from '../hooks/useDocument';
+import { useDocument } from '../../hooks/useDocument';
 import { useState, useEffect } from 'react';
 
-import Products from '../services/Products';
-import { queryBuilder } from '../services/Helpers';
+import Products from '../../services/Products';
+import { queryBuilder } from '../../services/Helpers';
 
 import './Home.css';
 import { keyboard } from '@testing-library/user-event/dist/keyboard';
