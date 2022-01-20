@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
+import Avatar from 'boring-avatars';
 
 // styles & images
 import './Navbar.css';
@@ -29,7 +30,14 @@ export default function Navbar() {
         {user && (
           <>
             <li className='avatar'>
-              <img src='' alt='' />
+              <Link to='/profile'>
+                <Avatar
+                  size={40}
+                  name={user.uid}
+                  variant='beam'
+                  colors={['#4E7CB9', '#B1CFF7', '#67A4F5', '#546375', '#5182C2']}
+                />
+              </Link>
             </li>
             <li>
               {!isPending ? (
